@@ -5,9 +5,7 @@ import App from './App'
 import router from './router'
 
 //组件
-import czbutton from './components/CZbutton.vue'
 
-Vue.component('czbutton',czbutton);
 
 Vue.config.productionTip = false;
 
