@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    weqeqweqw
+    weqeqw
 
   </div>
 </template>
