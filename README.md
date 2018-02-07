@@ -1,7 +1,7 @@
 # 答题赢红包，微端项目。
 
 > A Vue.js project
-1111111
+
 ## Build Setup
 
 ``` bash

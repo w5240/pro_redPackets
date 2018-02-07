@@ -1,14 +1,15 @@
 <template>
   <div class="answer">
-    <div class="ques">
+    <div class="quesNow ques" v-for="(q,i) in quesAll" @touchstart="start($event)" @touchend="end($event,i)" :style="{left:i*100+5+'%'}">
       <div class="title">单选题</div>
       <div class="ti">
-        <h2>1.某省地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评教育、诫勉谈话，但是板子高高举起，每每轻轻放下。许某的行为触犯了《中国共产党纪律处分条例》中的（  ）规定。</h2>
+        <h2>{{q.ques}}</h2>
         <ul>
-          <li v-for="e in answer" :class="whichChoose===e.option?(e.option===rightAnswer?'right':'wrong'):''" @click="whichChoose=e.option;choose()">{{e.content}}</li>
+          <li v-for="e in q.answer" :class="whichChoose===e.option?(e.option===rightAnswer?'right':'wrong'):''" @click="whichChoose=e.option;choose()">{{e.content}}</li>
         </ul>
       </div>
-      <button class="next">下一题</button>
+      <p class="tip">可左右滑动切换题目</p>
+      <button class="next" @click="next(i)">下一题</button>
     </div>
     <div class="allRight" v-if="allRight">
       <div class="bg">
@@ -33,50 +34,126 @@
 </template>
 <script>
   export default{
-      data(){
-          return{
-            answer:[{content:'A.党员领导干部对违反政治纪律和政治规矩等错误思想和行为放任不管，搞无原则一团和气',option:'A'},
+    data(){
+      return{
+        quesAll:[{ques:'1.某省地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评教育、诫勉谈话，但是板子高高举起，每每轻轻放下。许某的行为触犯了《中国共产党纪律处分条例》中的（  ）规定。',
+          answer:[{content:'A.党员领导干部对违反政治纪律和政治规矩等错误思想和行为放任不管，搞无原则一团和气',option:'A'},
             {content:'B.在党内搞团团伙伙、结党营私、拉帮结派、培植私人势力',option:'B'},
             {content:'C.故意作出与党和国家的方针政策以及决策部署相违背的决定',option:'C'}],
-            wrongAnswer:[{ques:'1.某省地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评教育、诫勉谈话，但是板子高高举起，每每轻轻放下。许某的行为触犯了《中国共产党纪律处分条例》中的（  ）规定。',content:'真确答案是：B.在党内搞团团伙伙、结党营私、拉帮结派、培植私人势力'},],
-            rightAnswer:'B',
-            whichChoose:'',
+          rightAnswer:'A',
+        },{ques:'2.某省诫勉放某的',
+          answer:[{content:'A.党员领导干规和气',option:'A'},
+            {content:'B.在党私人势力',option:'B'},
+            {content:'C.故意及的决定',option:'C'}],
+          rightAnswer:'B',
+        },{ques:'3.次也批评某的',
+          answer:[{content:'A.想气',option:'A'},
+            {content:'B.在党内搞势力',option:'B'},
+            {content:'C.故意作决定',option:'C'}],
+          rightAnswer:'C',
+        },{ques:'4.次也批评某的',
+          answer:[{content:'A.想气',option:'A'},
+            {content:'B.在党内搞势力',option:'B'},
+            {content:'C.故意作决定',option:'C'}],
+          rightAnswer:'A',
+        },],
 
-            allRight:false,
-            over:false,
-          }
-      },
+        rightAnswer:'',
+        quesIndex:0,
+
+        wrongAnswer:[{ques:'1.某省地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评教育、诫勉谈话，但是板子高高举起，每每轻轻放下。许某的行为触犯了《中国共产党纪律处分条例》中的（  ）规定。',content:'真确答案是：B.在党内搞团团伙伙、结党营私、拉帮结派、培植私人势力'},],
+
+        whichChoose:'',
+        allRight:false,
+        over:false,
+
+        move:''
+      }
+    },
+    watch:{
+      quesIndex(n,o){
+        this.rightAnswer = this.quesAll[n].rightAnswer;
+      }
+    },
+    mounted(){
+      this.rightAnswer = this.quesAll[0].rightAnswer;
+
+    },
     methods:{
-          choose(){
-              if(this.whichChoose===this.rightAnswer){
-                  setTimeout(()=>{this.allRight = true;},1000)
-              }else{
-                  this.over = true
-              }
-          }
+      choose(){
+        if(this.whichChoose===this.rightAnswer){
+          setTimeout(()=>{this.allRight = true;},1000)
+        }else{
+          this.over = true
+        }
+      },
+      last(index){
+        if(index!==0) {
+          this.quesIndex--;
+          document.querySelectorAll('.ques').forEach((e, i) => {
+            e.style.left = (-this.quesIndex + i) * 100 + 5 + "%"
+          })
+        }
+      },
+      next(index){
+        if(index!==this.quesAll.length-1) {
+          this.quesIndex++;
+          document.querySelectorAll('.ques').forEach((e, i) => {
+            e.style.left = (-this.quesIndex + i) * 100 + 5 + "%"
+          })
+        }
+      },
+      start(e){
+        this.move = e.changedTouches[0].clientX;
+
+      },
+      end(e,i){
+        if(e.changedTouches[0].clientX - this.move <-20){
+            this.next(i)
+        }else if(e.changedTouches[0].clientX - this.move >20){
+          this.last(i)
+        }
+      }
     }
   }
 
 </script>
 <style lang="scss" scoped>
   @import "../../components/style/index.scss";
+
   .answer{
-    height:100vh;
+    position: relative;
     width:100%;
+    min-height:100vh;
     background-image: url(./imgs/answerbg.png);
+    background-color: #de22e0;
     box-sizing: border-box;
     -webkit-background-size: 100% 100%;
     background-size:100% 100%;
     padding-top:20%;
+    padding-bottom:10%;
+    overflow-x: hidden;
+
     .ques{
+      position: absolute;
       width:90%;
-      height:90%;
+      left:5%;
       margin:0 auto;
       background-image: url(./imgs/tibg.png);
       -webkit-background-size:100% 100%;
       background-size:100% 100%;
       color:white;
       padding-top:v(20px);
+      padding-bottom:v(80px);
+      transition: all .4s;
+
+      &.quesLeft{
+        left:-95%;
+      }
+      &.quesRight{
+        left:105%;
+      }
+
       .title{
         background-image: url(./imgs/title.png);
         margin:0 auto;
@@ -93,14 +170,13 @@
         width:80%;
         height:70%;
         margin-left:10%;
-        margin-top:v(40px);
-        overflow-y: auto;
+        margin-top:v(100px);
         h2{
           color:#cc3422;
           font-size:v(28px);
           letter-spacing:v(8px);
           line-height:v(30px);
-          margin-bottom:v(30px)
+          margin-bottom:v(30px);
         }
         ul{
           li{
@@ -123,12 +199,16 @@
           }
         }
       }
+      .tip{
+        color:#ef8317;
+        text-align: center;
+      }
       .next{
         background-color: #ea160a;
         height:v(80px);
         width:v(300px);
         display: block;
-        margin:0 auto;
+        margin:v(20px) auto 0;
         border-radius:v(80px);
         box-shadow:inset -2px -2px 2px #9b181a;
         color:#f9c452;
