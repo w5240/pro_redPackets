@@ -9,7 +9,7 @@
         </ul>
       </div>
       <p class="tip">可左右滑动切换题目</p>
-      <button class="next" @click="next(i)">下一题</button>
+      <button class="next" @click="next(i)">{{(i===quesAll.length-1)?'已是最后一题':'下一题'}}</button>
     </div>
     <div class="allRight" v-if="allRight">
       <div class="bg">
@@ -41,20 +41,20 @@
             {content:'B.在党内搞团团伙伙、结党营私、拉帮结派、培植私人势力',option:'B'},
             {content:'C.故意作出与党和国家的方针政策以及决策部署相违背的决定',option:'C'}],
           rightAnswer:'A',
-        },{ques:'2.某省诫勉放某的',
-          answer:[{content:'A.党员领导干规和气',option:'A'},
-            {content:'B.在党私人势力',option:'B'},
-            {content:'C.故意及的决定',option:'C'}],
+        },{ques:'2.某省诫勉放，每次也批评',
+          answer:[{content:'A.党员领导干规和气地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'A'},
+            {content:'B.在党私人势力地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'B'},
+            {content:'C.故意及的决定地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'C'}],
           rightAnswer:'B',
-        },{ques:'3.次也批评某的',
-          answer:[{content:'A.想气',option:'A'},
-            {content:'B.在党内搞势力',option:'B'},
-            {content:'C.故意作决定',option:'C'}],
+        },{ques:'3.次也批评某的地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',
+          answer:[{content:'A.想气地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'A'},
+            {content:'B.在党内搞势力地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'B'},
+            {content:'C.故意作决定地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'C'}],
           rightAnswer:'C',
-        },{ques:'4.次也批评某的',
-          answer:[{content:'A.想气',option:'A'},
-            {content:'B.在党内搞势力',option:'B'},
-            {content:'C.故意作决定',option:'C'}],
+        },{ques:'4.次也批评某的地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',
+          answer:[{content:'A.想气地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'A'},
+            {content:'B.在党内搞势力地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'B'},
+            {content:'C.故意作决定地税局原党组书记、局长许某，对于系统内的一些问题，每次也批评',option:'C'}],
           rightAnswer:'A',
         },],
 
@@ -127,11 +127,10 @@
     min-height:100vh;
     background-image: url(./imgs/answerbg.png);
     background-color: #de22e0;
-    box-sizing: border-box;
+    /*box-sizing: border-box;*/
     -webkit-background-size: 100% 100%;
     background-size:100% 100%;
     padding-top:20%;
-    padding-bottom:10%;
     overflow-x: hidden;
 
     .ques{
@@ -146,14 +145,13 @@
       padding-top:v(20px);
       padding-bottom:v(80px);
       transition: all .4s;
-
-      &.quesLeft{
-        left:-95%;
+      &:after{
+        content: '';
+        display: block;
+        clear:both;
+        visibility: hidden;
+        height:0;
       }
-      &.quesRight{
-        left:105%;
-      }
-
       .title{
         background-image: url(./imgs/title.png);
         margin:0 auto;
